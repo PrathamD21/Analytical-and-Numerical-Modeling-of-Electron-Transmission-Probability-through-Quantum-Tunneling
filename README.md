@@ -1,43 +1,57 @@
 # Analytical-and-Numerical-Modeling-of-Electron-Transmission-Probability-through-Quantum-Tunneling
-QuantumTransportLab is a Python-based simulation framework for modeling quantum tunneling in nanoscale devices. Implements Schrödinger–Poisson, Transfer Matrix, Landauer, and Monte Carlo methods to analyze MIM, RTD, and TFET structures with inelastic scattering and statistical variability.
+QuantumTransportLab is a Python-based simulation framework for modeling quantum tunneling in nanoscale devices. This framework reproduces key plots, numerical values, and validation workflows used in the GaAs/AlGaAs Resonant Tunneling Diode (RTD) study — including transmission spectra, I–V characteristics, inelastic broadening, and Monte Carlo statistics.
 
 ⚙️ Features and Capabilities
 
-✅ 1D Schrödinger Equation Solver (Finite Difference)
-
-Computes eigenenergies and wavefunctions for arbitrary potential profiles.
-Supports multiple boundary conditions and spatial discretizations.
+⚙️ Features and Capabilities
 
 ✅ Transfer Matrix Method (TMM)
 
-Handles arbitrary multilayer and heterostructure systems.
-Includes effective mass discontinuity matching at material interfaces.
-Produces energy-resolved transmission spectra T(E).
+Handles both single and multilayer (RTD-like) quantum structures.
+
+Implements complex potential extension for inelastic broadening (Γ model).
+
+Produces accurate T(E) transmission spectra across 0–1.5 eV.
+
+✅ Finite-Difference Schrödinger Equation Solver
+
+Computes bound state eigenenergies and wavefunctions for arbitrary potential profiles.
+
+Uses SciPy’s sparse eigenvalue solver for efficiency.
 
 ✅ WKB Approximation
 
-Implements analytical tunneling solutions for smooth or slowly varying potentials.
-Provides fast validation and benchmarking against numerical solvers.
+Implements semi-analytical tunneling transmission for smoothly varying barriers.
 
-✅ Self-Consistent Schrödinger–Poisson Solver
+Useful for quick validation of numerical TMM results.
 
-Iteratively solves charge density and electrostatic potential profiles.
-Uses finite-difference Poisson solver with SciPy.spsolve (LU decomposition).
+✅ Self-Consistent Schrödinger–Poisson Solver (Toy Model)
 
-✅ Landauer Formalism for Current Evaluation
+Iterative coupling between charge density and potential.
 
-Calculates tunneling current density using energy-integrated transmission.
-Supports temperature dependence via Fermi–Dirac statistics.
+Solves 1D Poisson equation via finite differences with Dirichlet BCs.
+
+✅ Landauer Formalism for Current–Voltage (I–V)
+
+Computes tunneling current density using integrated transmission spectra.
+
+Includes temperature dependence and Fermi–Dirac occupations.
 
 ✅ Monte Carlo Statistical Variation
 
-Models fabrication-induced barrier width fluctuations.
-Performs random sampling (Gaussian N=5000) and outputs statistical spread in transmission and current.
+Models fabrication-induced barrier width fluctuations (Gaussian sampling, N = 5000).
 
-✅ Phenomenological Inelastic Scattering (Γ Model)
+Outputs mean, standard deviation, skewness, and 95 % confidence intervals for transmission.
 
-Adds imaginary potential iΓ/2 to emulate phonon-assisted dephasing.
-Reproduces resonance broadening and loss of coherence.
+✅ Phenomenological Inelastic Scattering (Lorentzian Broadening)
+
+Adds imaginary potential iΓ/2 or Lorentzian convolution to simulate phonon-assisted dephasing.
+
+Replicates resonance broadening and coherence loss in experimental RTDs.
+
+✅ Automated Verification Demo
+
+Reproduces paper’s key graphs and outputs all results to a local /results_demo directory.
 
 ✅ Convergence and Validation Tests
 
@@ -46,57 +60,52 @@ Includes automatic mesh refinement and energy-grid convergence checks.
 
 📊 Implemented Models
 
-Model	Method	Description
+| Model / Equation      | Method Used                  | Description                           |
+| --------------------- | ---------------------------- | ------------------------------------- |
+| Schrödinger Equation  | Finite Difference (FD)       | Eigenvalue solver for confined states |
+| Transmission (T(E))   | Transfer Matrix Method (TMM) | Multi-barrier RTD tunneling           |
+| WKB Approximation     | Semi-Analytical Integration  | Analytical validation                 |
+| Poisson Equation      | Finite-Difference Solver     | Electrostatic potential solution      |
+| Current Density (I–V) | Landauer–Büttiker Formalism  | Quantum current integration           |
+| Statistical Variation | Monte Carlo Sampling         | Randomized barrier width analysis     |
+| Inelastic Scattering  | Lorentzian Convolution / iΓ  | Dephasing and resonance broadening    |
 
-Schrödinger Eq.
-
-TMM	
-
-WKB	
-
-Poisson Eq.	
-
-Landauer
-
-Monte Carlo
-
-Γ Model
 
 🧩 Directory Structure
 
-QuantumTransportLab/
-
+QuantumTunnelingVerification/
 │
+├── tunneling_verification_suite.py     # Main verification and simulation script
+├── README.md                           # Project documentation (this file)
+│
+├── results_demo/                       # Auto-generated demo output directory
+│   ├── T_RTD_nominal.png               # Transmission Spectrum – RTD (V0=0.5 eV, b=1.8 nm, w=4 nm)
+│   ├── IV_RTD_illustrative.png         # Illustrative I–V curve (Landauer integration)
+│   ├── T_single_barrier.txt            # T(E) data for single-barrier structure
+│   ├── IV_single_barrier.txt           # I–V data (single barrier)
+│   ├── mc_thicknesses.txt              # Monte Carlo thickness samples
+│   ├── mc_Tvals.txt                    # Monte Carlo transmission samples
+│   ├── mc_stats.json                   # Monte Carlo statistical summary
+│   ├── T_RTD_G10meV.txt ... G70meV.txt # T(E) for Γ=10–70 meV broadenings
+│   ├── V_sc.txt                        # Toy Schrödinger–Poisson convergence potential
+│   └── T_single_broadened_gamma20meV.txt
+│
+└── data/ (optional)                    # Placeholder for user-provided parameter sets or validation datasets
 
-├── quantum_transport_lab.py # Main simulation framework
-
-├── README.md # Project documentation
-
-├── results/
-
-│ ├── RTD_T_E.png # RTD Transmission vs Energy (with Γ)
-
-│ ├── poisson_profile.png # Example Poisson potential solution
-
-│ ├── montecarlo_histogram.png # Monte Carlo T(E) distribution
-
-│ └── validation_curves.png # Analytical vs TMM validation
-
-└── data/ # Optional data files or parameter sets
 
 🧠 Theoretical Foundations
 
 The framework integrates multiple established quantum transport theories:
 
-Transfer Matrix Method (TMM) for multilayer tunneling structures.
+Transfer Matrix Method (TMM) – for exact coherent transmission across layered barriers.
 
-Wentzel–Kramers–Brillouin (WKB) approximation for analytical scaling.
+WKB Approximation – for analytical benchmarking and asymptotic scaling.
 
-Landauer–Büttiker formalism for current–voltage (I–V) calculations.
+Landauer–Büttiker Formalism – for bias-dependent tunneling current integration.
 
-Self-consistent Schrödinger–Poisson coupling for charge–potential feedback.
+Schrödinger–Poisson Coupling – for potential self-consistency (toy demonstration).
 
-Phenomenological dephasing model (Datta, 2005) via complex potential broadening.
+Complex-Potential Dephasing – following Datta’s phenomenological model for inelastic scattering.
 
 
 🚀 How to Run
@@ -109,10 +118,23 @@ pip install numpy scipy matplotlib
 python quantum_transport_lab.py
 
 3️⃣ Outputs
-Transmission curves (RTD_T_E.png)
-Poisson potential profile (poisson_profile.png)
-Convergence and validation reports (printed in console)
-Monte Carlo statistics and histogram
+The demo automatically generates and saves:
+
+Transmission Spectrum:
+T_RTD_nominal.png – for GaAs/AlGaAs RTD (V₀ = 0.5 eV, barrier = 1.8 nm, well = 4.0 nm).
+
+I–V Characteristic:
+IV_RTD_illustrative.png – using Landauer formalism with bias shift.
+
+Monte Carlo Statistics:
+Mean ± 95 % CI of T(E) under barrier-width fluctuation.
+
+Inelastic Broadening Variants:
+Lorentzian-convolved spectra for Γ = 10–70 meV.
+
+Toy Schrödinger–Poisson Profile:
+Converged potential stored in V_sc.txt.
+
 
 
 🧑‍💻 Citation
