@@ -3,8 +3,6 @@ QuantumTransportLab is a Python-based simulation framework for modeling quantum 
 
 ⚙️ Features and Capabilities
 
-⚙️ Features and Capabilities
-
 ✅ Transfer Matrix Method (TMM)
 
 Handles both single and multilayer (RTD-like) quantum structures.
