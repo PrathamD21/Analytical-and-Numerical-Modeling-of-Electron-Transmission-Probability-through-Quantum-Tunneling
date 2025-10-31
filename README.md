@@ -72,23 +72,40 @@ Includes automatic mesh refinement and energy-grid convergence checks.
 🧩 Directory Structure
 
 QuantumTunnelingVerification/
+
 │
+
 ├── tunneling_verification_suite.py     # Main verification and simulation script
+
 ├── README.md                           # Project documentation (this file)
+
 │
+
 ├── results_demo/                       # Auto-generated demo output directory
+
 │   ├── T_RTD_nominal.png               # Transmission Spectrum – RTD (V0=0.5 eV, b=1.8 nm, w=4 nm)
+
 │   ├── IV_RTD_illustrative.png         # Illustrative I–V curve (Landauer integration)
+
 │   ├── T_single_barrier.txt            # T(E) data for single-barrier structure
+
 │   ├── IV_single_barrier.txt           # I–V data (single barrier)
+
 │   ├── mc_thicknesses.txt              # Monte Carlo thickness samples
+
 │   ├── mc_Tvals.txt                    # Monte Carlo transmission samples
+
 │   ├── mc_stats.json                   # Monte Carlo statistical summary
+
 │   ├── T_RTD_G10meV.txt ... G70meV.txt # T(E) for Γ=10–70 meV broadenings
+
 │   ├── V_sc.txt                        # Toy Schrödinger–Poisson convergence potential
+
 │   └── T_single_broadened_gamma20meV.txt
+
 │
-└── data/ (optional)                    # Placeholder for user-provided parameter sets or validation datasets
+
+└── data/ (optional)                    # Placeholder for user-provided parameter sets or validation datasets
 
 
 🧠 Theoretical Foundations
